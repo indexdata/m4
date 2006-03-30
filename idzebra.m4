@@ -1,4 +1,4 @@
-## $Id: idzebra.m4,v 1.1 2006-03-30 18:00:51 adam Exp $
+## $Id: idzebra.m4,v 1.2 2006-03-30 18:05:24 adam Exp $
 ## 
 # Use this m4 function for autoconf if you use ID Zebra in your own
 # configure script.
@@ -49,7 +49,7 @@ AC_DEFUN([IDZEBRA_INIT],
 			have_idzebra_version=`echo "$IDZEBRA_VERSION" | awk 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 1000 + [$]2) * 1000 + [$]3;}'`
 			req_idzebra_version=`echo "$2" | awk 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 1000 + [$]2) * 1000 + [$]3;}'`
 			if test "$have_idzebra_version" -lt "$req_idzebra_version"; then
-				AC_MSG_ERROR([$IDZEBRA_VERSION. Requires $2 or later])
+				AC_MSG_ERROR([$IDZEBRA_VERSION. Requires idzebra $2 or later])
 			fi
 		fi
 	fi
