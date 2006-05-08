@@ -120,11 +120,17 @@ if test "$exsltdir" != "no"; then
 		AC_DEFINE(HAVE_EXSLT)
 	else
 		AC_MSG_RESULT(Not found)
+	
+		if test "$pkgconfigpath" = "NONE"; then
+			extra="libEXLT not enabled. pkg-config not found."
+		else
+			extra="libEXLT development libraries not found."
+		fi
 
 		if test "$exsltdir" = "default"; then
-			AC_MSG_WARN([libEXSLT development libraries not found.])
+			AC_MSG_WARN([$extra])
 		else
-		        AC_MSG_ERROR([libEXSLT development libraries not found.])
+		        AC_MSG_ERROR([$extra])
 		fi
 	fi
 fi
