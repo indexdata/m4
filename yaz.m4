@@ -16,7 +16,8 @@ AC_ARG_WITH(docbook-dtd,[[  --with-docbook-dtd=DIR  use docbookx.dtd in DIR]],
 	for d in /usr/lib/sgml/dtd/docbook-xml \
 		 /usr/share/sgml/docbook/dtd/4.2 \
 		 /usr/share/sgml/docbook/dtd/xml/4.* \
-		 /usr/share/sgml/docbook/xml-dtd-4.* 
+		 /usr/share/sgml/docbook/xml-dtd-4.* \
+		/usr/local/share/xml/docbook/4.1.2
 	do
 		if test -f $d/docbookx.dtd; then
 			DTD_DIR=$d
@@ -39,7 +40,8 @@ AC_ARG_WITH(docbook-dsssl,[[  --with-docbook-dsssl=DIR use Docbook DSSSL in DIR/
 	DSSSL_DIR=""
 	for d in /usr/share/sgml/docbook/stylesheet/dsssl/modular \
 		/usr/share/sgml/docbook/dsssl-stylesheets-1.* \
-		/usr/lib/sgml/stylesheet/dsssl/docbook/nwalsh 
+		/usr/lib/sgml/stylesheet/dsssl/docbook/nwalsh \
+		/usr/local/share/sgml/docbook/dsssl/modular
 	do
 		if test -f $d/html/docbook.dsl; then
 			AC_MSG_RESULT($d)
