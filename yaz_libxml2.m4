@@ -122,9 +122,9 @@ if test "$exsltdir" != "no"; then
 		AC_MSG_RESULT(Not found)
 	
 		if test "$pkgconfigpath" = "NONE"; then
-			extra="libEXLT not enabled. pkg-config not found."
+			extra="libEXSLT not enabled. pkg-config not found."
 		else
-			extra="libEXLT development libraries not found."
+			extra="libEXSLT development libraries not found."
 		fi
 
 		if test "$exsltdir" = "default"; then
