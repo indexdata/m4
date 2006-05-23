@@ -4,6 +4,8 @@
 dnl ----- Setup Docbook documentation for YAZ
 AC_DEFUN([YAZ_DOC],
 [
+AC_CHECK_PROGS(DB2MAN_PROG,docbook2man docbook-to-man,None)
+DB2MAN_PROG="\$(srcdir)/common/${DB2MAN_PROG}.sh"
 AC_SUBST(DTD_DIR)	
 AC_ARG_WITH(docbook-dtd,[[  --with-docbook-dtd=DIR  use docbookx.dtd in DIR]],
 [
