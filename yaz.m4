@@ -62,6 +62,7 @@ AC_ARG_WITH(docbook-xsl,[[  --with-docbook-xsl=DIR  use Docbook XSL in DIR/{html
 ],[
 	AC_MSG_CHECKING(for htmlhelp.xsl)
 	for d in /usr/share/sgml/docbook/stylesheet/xsl/nwalsh \
+		/usr/local/share/xsl/docbook \
 		/usr/share/sgml/docbook/xsl-stylesheets-1.* 
 	do
 		if test -f $d/htmlhelp/htmlhelp.xsl; then
