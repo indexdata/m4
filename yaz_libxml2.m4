@@ -1,4 +1,5 @@
 AC_DEFUN([YAZ_LIBXML2],[
+AC_PATH_PROG(pkgconfigpath, pkg-config, NONE)
 xml2dir=default
 XML2_VER=""
 AC_ARG_WITH(xml2,[[  --with-xml2[=PREFIX]    use libxml2 in PREFIX]],xml2dir=$withval)
