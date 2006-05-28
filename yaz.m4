@@ -4,6 +4,15 @@
 dnl ----- Setup Docbook documentation for YAZ
 AC_DEFUN([YAZ_DOC],
 [
+AC_SUBST(XSLTPROC_COMPILE)
+XSLTPROC_COMPILE='xsltproc -path ".:$(srcdir)"'
+AC_SUBST(MAN_COMPILE)
+MAN_COMPILE='$(XSLTPROC_COMPILE) common/man.xsl'
+AC_SUBST(HTML_COMPILE)
+HTML_COMPILE='$(XSLTPROC_COMPILE) common/html.xsl'
+AC_SUBST(TKL_COMPILE)
+TKL_COMPILE='$(XSLTPROC_COMPILE) common/tkl.xsl'
+
 AC_SUBST(DTD_DIR)	
 AC_ARG_WITH(docbook-dtd,[[  --with-docbook-dtd=DIR  use docbookx.dtd in DIR]],
 [
