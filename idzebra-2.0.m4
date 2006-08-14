@@ -1,9 +1,9 @@
-## $Id: idzebra.m4,v 1.2 2006-03-30 18:05:24 adam Exp $
+## $Id: idzebra-2.0.m4,v 1.1 2006-08-14 12:18:49 adam Exp $
 ## 
 # Use this m4 function for autoconf if you use ID Zebra in your own
 # configure script.
 
-AC_DEFUN([IDZEBRA_INIT],
+AC_DEFUN([IDZEBRA_2_0_INIT],
 [
 	AC_SUBST(IDZEBRA_LIBS)
 	AC_SUBST(IDZEBRA_LALIBS)
@@ -11,24 +11,25 @@ AC_DEFUN([IDZEBRA_INIT],
 	AC_SUBST(IDZEBRA_VERSION)
 	idzebraconfig=NONE
 	idzebrapath=NONE
-	AC_ARG_WITH(idzebra, [  --with-idzebra=DIR      use idzebra-config in DIR (example /home/idzebra-1.4.0)], [idzebrapath=$withval])
+	AC_ARG_WITH(idzebra, [  --with-idzebra=DIR      use idzebra-config in DIR (example /home/idzebra-2.0.0)], [idzebrapath=$withval])
 	if test "x$idzebrapath" != "xNONE"; then
-		idzebraconfig=$idzebrapath/idzebra-config
+		idzebraconfig=$idzebrapath/idzebra-config-2.0
 	else
 		if test "x$srcdir" = "x"; then
 			idzebrasrcdir=.
 		else
 			idzebrasrcdir=$srcdir
 		fi
-		for i in ${idzebrasrcdir}/../idzebra* ${idzebrasrcdir}/../idzebra ../idzebra* ../zebra; do
-			if test -d $i; then
-				if test -r $i/idzebra-config; then
-					idzebraconfig=$i/idzebra-config
+		for dir in ${idzebrasrcdir}/../idzebra* ${idzebrasrcdir}/../idzebra ../idzebra* ../zebra; do
+			if test -d $dir; then
+				conf=$dir/idzebra-config-2.0
+				if test -r $conf; then
+					idzebraconfig=$conf
 				fi
 			fi
 		done
 		if test "x$idzebraconfig" = "xNONE"; then
-			AC_PATH_PROG(idzebraconfig, idzebra-config, NONE)
+			AC_PATH_PROG(idzebraconfig, idzebra-config-2.0, NONE)
 		fi
 	fi
 	AC_MSG_CHECKING(for idzebra)
