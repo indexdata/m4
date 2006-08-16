@@ -1,4 +1,4 @@
-## $Id: idzebra-2.0.m4,v 1.2 2006-08-16 13:11:37 adam Exp $
+## $Id: idzebra-2.0.m4,v 1.3 2006-08-16 13:32:25 adam Exp $
 ## 
 # Use this m4 function for autoconf if you use ID Zebra in your own
 # configure script.
@@ -34,9 +34,9 @@ AC_DEFUN([IDZEBRA_2_0_INIT],
 	fi
 	AC_MSG_CHECKING(for idzebra)
 	if $idzebraconfig --version >/dev/null 2>&1; then
-		IDZEBRA_LIBS=`$idzebraconfig --libs $1`
-		IDZEBRA_LALIBS=`$idzebraconfig --lalibs $1`
-		IDZEBRA_CFLAGS=`$idzebraconfig --cflags $1`
+		IDZEBRA_LIBS=`$idzebraconfig --libs`
+		IDZEBRA_LALIBS=`$idzebraconfig --lalibs`
+		IDZEBRA_CFLAGS=`$idzebraconfig --cflags`
 		IDZEBRA_VERSION=`$idzebraconfig --version`
 		AC_MSG_RESULT([$idzebraconfig])
 	else
