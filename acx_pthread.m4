@@ -145,9 +145,6 @@ acx_pthread_flags="pthreads none -Kthread -kthread lthread -pthread -pthreads -m
 # --thread-safe: KAI C++
 # pthread-config: use pthread-config program (for GNU Pth library)
 
-echo "host_cpu=$host_cpu"
-echo "host_os=$host_os"
-
 case "${host_cpu}-${host_os}" in
         *solaris*)
 
