@@ -32,6 +32,10 @@ AC_DEFUN([AC_CHECK_ICU], [
     echo "*** The icu-config script could not be found. Make sure it is"
     echo "*** in your path, and that taglib is properly installed."
     echo "*** Or see http://ibm.com/software/globalization/icu/"
+
+            # added 2007-04-27 Marc Cromme
+            HAVE_ICU=0
+            # end added
   else
     ICU_VERSION=`$ICU_CONFIG --version`
     AC_MSG_CHECKING(for ICU >= $1)
@@ -39,6 +43,14 @@ AC_DEFUN([AC_CHECK_ICU], [
         if test "$VERSION_CHECK" = "1" ; then
             AC_MSG_RESULT(yes)
             succeeded=yes
+
+            # added 2007-04-27 Marc Cromme
+            HAVE_ICU=1
+
+            AC_MSG_CHECKING(ICU_CPPFLAGS)
+            ICU_CPPFLAGS=`$ICU_CONFIG --cppflags`" -DHAVE_ICU=1"
+            AC_MSG_RESULT($ICU_CPPFLAGS)
+            # end added
 
             AC_MSG_CHECKING(ICU_CFLAGS)
             ICU_CFLAGS=`$ICU_CONFIG --cflags`
@@ -52,6 +64,9 @@ AC_DEFUN([AC_CHECK_ICU], [
             ICU_LIBS=`$ICU_CONFIG --ldflags`
             AC_MSG_RESULT($ICU_LIBS)
         else
+            # added 2007-04-27 Marc Cromme
+            ICU_CPPFLAGS=""
+            # end added
             ICU_CFLAGS=""
             ICU_CXXFLAGS=""
             ICU_LIBS=""
@@ -60,6 +75,10 @@ AC_DEFUN([AC_CHECK_ICU], [
             ifelse([$3], ,echo "can't find ICU >= $1",)
         fi
 
+        # added 2007-04-27 Marc Cromme
+        AC_SUBST(HAVE_ICU)
+        AC_SUBST(ICU_CPPFLAGS)
+        # end added
         AC_SUBST(ICU_CFLAGS)
         AC_SUBST(ICU_CXXFLAGS)
         AC_SUBST(ICU_LIBS)
