@@ -4,6 +4,11 @@
 dnl ----- Setup Docbook documentation for YAZ
 AC_DEFUN([YAZ_DOC],
 [
+dnl autoconf < 2.60 does not define docdir
+if test -n "$docdir"; then
+        docdir="${datadir}/doc/${PACKAGE}"
+        AC_SUBST([docdir])
+fi
 AC_SUBST(XSLTPROC_COMPILE)
 XSLTPROC_COMPILE='xsltproc -path ".:$(srcdir)"'
 AC_SUBST(MAN_COMPILE)
