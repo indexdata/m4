@@ -1,5 +1,6 @@
 AC_DEFUN([YAZ_LIBXML2],[
 AC_PATH_PROG(pkgconfigpath, pkg-config, NONE)
+pkgmodule=""
 xml2dir=default
 XML2_VER=""
 AC_ARG_WITH(xml2,[[  --with-xml2[=PREFIX]    use libxml2 in PREFIX]],xml2dir=$withval)
@@ -12,6 +13,7 @@ if test "$xml2dir" = "yes" -o "$xml2dir" = "default"; then
 	fi
     fi
     if test -z "$pkgmodule"; then
+	AC_MSG_RESULT([using xml2-config])
 	for d in /usr /usr/local; do
 	    if test -x $d/bin/xml2-config; then
 		xml2dir=$d
@@ -47,8 +49,9 @@ fi
 ])
 
 AC_DEFUN([YAZ_LIBXSLT],[
-	xsltdir=default
 pkgmodule=""
+xsltdir=default
+yaz_xslt_pkgconfig=no
 XSLT_VER=""
 AC_ARG_WITH(xslt,[[  --with-xslt[=PREFIX]    use libXSLT in PREFIX]],xsltdir=$withval)
 
@@ -79,6 +82,7 @@ if test "$xsltdir" != "no"; then
 	XSLT_VER=`$pkgconfigpath --modversion $pkgmodule`
 	AC_MSG_RESULT($XSLT_VER)
 	m4_default([$1],[AC_DEFINE(HAVE_XSLT)])
+	yaz_xslt_pkgconfig=yes
     elif test -x $xsltdir/bin/xslt-config; then
 	XML2_LIBS=`$xsltdir/bin/xslt-config --libs`
 	XML2_CFLAGS=`$xsltdir/bin/xslt-config --cflags`
@@ -113,11 +117,15 @@ fi
 if test "$exsltdir" != "no"; then
     AC_MSG_CHECKING(for libEXSLT)
     if test "$pkgmodule"; then
-	XML2_LIBS=`$pkgconfigpath --libs $pkgmodule`
-	XML2_CFLAGS=`$pkgconfigpath --cflags $pkgmodule`
-	EXSLT_VER=`$pkgconfigpath --modversion $pkgmodule`
-	AC_MSG_RESULT($EXSLT_VER)
-	m4_default([$1],[AC_DEFINE(HAVE_EXSLT)])
+	if test "$yaz_xslt_pkgconfig" != "yes"; then
+	    AC_MSG_RESULT([Disabled. Libxslt is not pkg-config configured])
+	else
+	    XML2_LIBS=`$pkgconfigpath --libs $pkgmodule`
+	    XML2_CFLAGS=`$pkgconfigpath --cflags $pkgmodule`
+	    EXSLT_VER=`$pkgconfigpath --modversion $pkgmodule`
+	    AC_MSG_RESULT($EXSLT_VER)
+	    m4_default([$1],[AC_DEFINE(HAVE_EXSLT)])
+	fi
     else
 	AC_MSG_RESULT(Not found)
 	
