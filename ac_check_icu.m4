@@ -33,9 +33,6 @@ AC_DEFUN([AC_CHECK_ICU], [
     echo "*** in your path, and that taglib is properly installed."
     echo "*** Or see http://ibm.com/software/globalization/icu/"
 
-            # added 2007-04-27 Marc Cromme
-            HAVE_ICU=0
-            # end added
   else
     ICU_VERSION=`$ICU_CONFIG --version`
     AC_MSG_CHECKING(for ICU >= $1)
@@ -45,10 +42,8 @@ AC_DEFUN([AC_CHECK_ICU], [
             succeeded=yes
 
             # added 2007-04-27 Marc Cromme
-            HAVE_ICU=1
-
             AC_MSG_CHECKING(ICU_CPPFLAGS)
-            ICU_CPPFLAGS=`$ICU_CONFIG --cppflags`" -DHAVE_ICU=1"
+            ICU_CPPFLAGS=`$ICU_CONFIG --cppflags`""
             AC_MSG_RESULT($ICU_CPPFLAGS)
             # end added
 
@@ -76,7 +71,6 @@ AC_DEFUN([AC_CHECK_ICU], [
         fi
 
         # added 2007-04-27 Marc Cromme
-        AC_SUBST(HAVE_ICU)
         AC_SUBST(ICU_CPPFLAGS)
         # end added
         AC_SUBST(ICU_CFLAGS)
