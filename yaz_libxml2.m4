@@ -13,7 +13,6 @@ if test "$xml2dir" = "yes" -o "$xml2dir" = "default"; then
 	fi
     fi
     if test -z "$pkgmodule"; then
-	AC_MSG_RESULT([using xml2-config])
 	for d in /usr /usr/local; do
 	    if test -x $d/bin/xml2-config; then
 		xml2dir=$d
