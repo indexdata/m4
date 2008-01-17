@@ -24,7 +24,7 @@
 AC_DEFUN([AC_CHECK_ICU],[
 	succeeded=no
 	icudir=default
-	AC_ARG_WITH(icu,[  --with-icu[=PREFIX]     use libicu in PREFIX],icudir=$withval)
+	AC_ARG_WITH(icu,[  --with-icu[=PREFIX]       use ICU libs in PREFIX],icudir=$withval)
 	
 	if test "$icudir" != "no"; then
 	    if test "$icudir" = "yes" -o "$icudir" = "default"; then
