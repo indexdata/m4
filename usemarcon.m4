@@ -1,4 +1,3 @@
-## $Id: usemarcon.m4,v 1.1 2006-03-30 17:31:25 adam Exp $
 AC_DEFUN([USEMARCON_INIT],
 [
         AC_SUBST(USEMARCONLALIB)

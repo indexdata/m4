@@ -1,5 +1,3 @@
-## $Id: idzebra-2.0.m4,v 1.3 2006-08-16 13:32:25 adam Exp $
-## 
 # Use this m4 function for autoconf if you use ID Zebra in your own
 # configure script.
 
