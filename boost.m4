@@ -1,6 +1,16 @@
 # configure for Boost libs
 #
 # ID_BOOST([components],[libs])
+#
+# Sets the following variables:
+#
+#   BOOST_CPPFLAGS
+#   BOOST_LIB
+# If components include "thread":
+#   BOOST_THREAD_LIB
+# If components include "test":
+#   BOOST_TEST_LIB
+
 AC_DEFUN([ID_BOOST],
     [
 	AC_SUBST(BOOST_CPPFLAGS)
@@ -53,9 +63,10 @@ int x = BOOST_VERSION;
 	    case $c in 
 		thread)
 		    AC_SUBST(BOOST_THREAD_LIB)
-		    BOOST_THREAD_LIB="-lboost_thread"
+		    BOOST_THREAD_LIB="-lboost_thread-mt"
+		    LIBS="${LIBS} ${BOOST_THREAD_LIB}"
 		    AC_MSG_CHECKING([Boost threads])
-		    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+		    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
 #include <boost/thread/thread.hpp>
 ]],[[ 
@@ -67,9 +78,11 @@ AC_MSG_ERROR([Boost thread libraries required])
                     ;;
 		test)
 		    AC_SUBST(BOOST_TEST_LIB)
-		    BOOST_TEST_LIB="-lboost_unit_test_framework"
+		    saveLIBS="${LIBS}"
+		    BOOST_TEST_LIB="-lboost_unit_test_framework-mt"
+		    LIBS="${LIBS} ${BOOST_TEST_LIB}"
 		    AC_MSG_CHECKING([Boost unit test framework])
-		    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+		    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
 BOOST_AUTO_TEST_CASE( t ) 
@@ -79,6 +92,7 @@ BOOST_AUTO_TEST_CASE( t )
 ]],[[ 
 ]])],[AC_MSG_RESULT([yes])],[AC_MSG_RESULT([no])
 AC_MSG_ERROR([Boost unit test framework libraries required])])
+		    LIBS="${saveLIBS}"
                     ;;
 		esac
 	done
