@@ -54,7 +54,16 @@ version_is:BOOST_VERSION
 	    	case $c in 
 		    thread)
 			AC_SUBST([BOOST_THREAD_LIB])
-		        BOOST_THREAD_LIB="-lboost_thread-mt"
+			BOOST_THREAD_LIB=""
+			for l in boost_thread-mt boost_thread; do
+			    AC_CHECK_LIB([${l}],[main],[
+				    BOOST_THREAD_LIB="-l${l}"
+				    break
+				    ],[])
+			done
+			if test -z "${BOOST_THREAD_LIB}"; then
+			    AC_MSG_ERROR([Boost thread libs not found])
+			fi
 		        LIBS="${LIBS} ${BOOST_THREAD_LIB}"
 			AC_MSG_CHECKING([Boost threads])
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
@@ -69,8 +78,17 @@ AC_MSG_ERROR([Boost thread libraries required])
 			;;
 		    test)
 			AC_SUBST([BOOST_TEST_LIB])
+			BOOST_TEST_LIB=""
+			for l in boost_unit_test_framework-mt boost_unit_test_framework; do
+			    AC_CHECK_LIB([${l}],[main],[
+				    BOOST_TEST_LIB="-l${l}"
+				    break
+				    ],[])
+			done
+			if test -z "${BOOST_TEST_LIB}"; then
+			    AC_MSG_ERROR([Boost unit test libs not found])
+			fi
 			saveLIBS="${LIBS}"
-			BOOST_TEST_LIB="-lboost_unit_test_framework-mt"
 			LIBS="${LIBS} ${BOOST_TEST_LIB}"
 			AC_MSG_CHECKING([Boost unit test framework])
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
