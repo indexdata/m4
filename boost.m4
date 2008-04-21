@@ -81,7 +81,7 @@ int x = BOOST_VERSION;
 			BOOST_TEST_LIB=""
 			for l in boost_unit_test_framework-mt boost_unit_test_framework; do
 			    LIBS="${saveLIBS} -l${l}"
-			    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			    AC_LINK_IFELSE([AC_LANG_SOURCE([[
 #define BOOST_TEST_DYN_LINK
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -89,7 +89,6 @@ BOOST_AUTO_TEST_CASE( t )
 {
     BOOST_CHECK(1);
 }
-]],[[ 
 ]])],[
 			      BOOST_TEST_LIB="-l${l}"
 			      break
