@@ -53,45 +53,35 @@ version_is:BOOST_VERSION
 	    for c in $1; do
 	    	case $c in 
 		    thread)
+			AC_MSG_CHECKING([Boost threads])
 			AC_SUBST([BOOST_THREAD_LIB])
+			saveLIBS="${LIBS}"
 			BOOST_THREAD_LIB=""
 			for l in boost_thread-mt boost_thread; do
-			    AC_CHECK_LIB([${l}],[main],[
-				    BOOST_THREAD_LIB="-l${l}"
-				    break
-				    ],[])
-			done
-			if test -z "${BOOST_THREAD_LIB}"; then
-			    AC_MSG_ERROR([Boost thread libs not found])
-			fi
-		        LIBS="${LIBS} ${BOOST_THREAD_LIB}"
-			AC_MSG_CHECKING([Boost threads])
+		            LIBS="${saveLIBS} -l${l}"
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
 #include <boost/thread/thread.hpp>
 ]],[[ 
 int x = BOOST_VERSION;
-]])],[AC_MSG_RESULT([yes])],[
-AC_MSG_RESULT([no])
-AC_MSG_ERROR([Boost thread libraries required])
-			    ])
+]])],[
+			    BOOST_THREAD_LIB="-l${l}"
+			    break],[])
+			done
+			if test "${BOOST_THREAD_LIB}"; then
+			    AC_MSG_RESULT([yes])
+			else
+			    AC_MSG_RESULT([no])
+			fi
 			;;
 		    test)
+			AC_MSG_CHECKING([Boost unit test framework])
+			saveLIBS="${LIBS}"
 			AC_SUBST([BOOST_TEST_LIB])
 			BOOST_TEST_LIB=""
 			for l in boost_unit_test_framework-mt boost_unit_test_framework; do
-			    AC_CHECK_LIB([${l}],[main],[
-				    BOOST_TEST_LIB="-l${l}"
-				    break
-				    ],[])
-			done
-			if test -z "${BOOST_TEST_LIB}"; then
-			    AC_MSG_ERROR([Boost unit test libs not found])
-			fi
-			saveLIBS="${LIBS}"
-			LIBS="${LIBS} ${BOOST_TEST_LIB}"
-			AC_MSG_CHECKING([Boost unit test framework])
-			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			    LIBS="${saveLIBS} -l${l}"
+			    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
 BOOST_AUTO_TEST_CASE( t ) 
@@ -99,8 +89,16 @@ BOOST_AUTO_TEST_CASE( t )
     BOOST_CHECK(1);
 }
 ]],[[ 
-]])],[AC_MSG_RESULT([yes])],[AC_MSG_RESULT([no])
-AC_MSG_ERROR([Boost unit test framework libraries required])])
+]])],[
+			      BOOST_TEST_LIB="-l${l}"
+			      break
+],[])
+			done
+			if test "${BOOST_TEST_LIB}"; then
+			    AC_MSG_RESULT([yes])
+			else
+			    AC_MSG_RESULT([no])
+			fi
 			LIBS="${saveLIBS}"
 			;;
 		esac
