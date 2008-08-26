@@ -18,7 +18,7 @@ HTML_COMPILE='$(XSLTPROC_COMPILE) $(srcdir)/common/id.htmlhelp.xsl'
 AC_SUBST(TKL_COMPILE)
 TKL_COMPILE='$(XSLTPROC_COMPILE) $(srcdir)/common/id.tkl.xsl'
 AC_SUBST(PDF_COMPILE)
-PDF_COMPILE='idblatex -P latex.class.options=a4paper,12pt,twoside,openright'
+PDF_COMPILE='dblatex -P latex.class.options=a4paper,12pt,twoside,openright'
 
 AC_SUBST(DTD_DIR)	
 AC_ARG_WITH(docbook-dtd,[[  --with-docbook-dtd=DIR  use docbookx.dtd in DIR]],
