@@ -45,6 +45,9 @@ AC_DEFUN([AC_CHECK_ICU],[
 		    
 		    AC_MSG_CHECKING(ICU_CPPFLAGS)
 		    ICU_CPPFLAGS=`$ICU_CONFIG --cppflags`""
+		    if test "$ICU_PREFIX" = "/usr"; then
+		       ICU_CPPFLAGS=`echo $ICU_CPPFLAGS|sed 's@-I/usr/include@@'`
+		    fi
 		    AC_MSG_RESULT($ICU_CPPFLAGS)
 		    
 		    AC_MSG_CHECKING(ICU_CFLAGS)
