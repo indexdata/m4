@@ -41,6 +41,8 @@ AC_DEFUN([AC_CHECK_ICU],[
 		    AC_MSG_RESULT(yes)
 		    succeeded=yes
 		    
+		    ICU_PREFIX=`$ICU_CONFIG --prefix`
+		    
 		    AC_MSG_CHECKING(ICU_CPPFLAGS)
 		    ICU_CPPFLAGS=`$ICU_CONFIG --cppflags`""
 		    AC_MSG_RESULT($ICU_CPPFLAGS)
@@ -54,7 +56,11 @@ AC_DEFUN([AC_CHECK_ICU],[
 		    AC_MSG_RESULT($ICU_CXXFLAGS)
 		    
 		    AC_MSG_CHECKING(ICU_LIBS)
-		    ICU_LIBS=`$ICU_CONFIG --ldflags`
+		    if test "$ICU_PREFIX" = "/usr"; then
+		        ICU_LIBS=`$ICU_CONFIG --ldflags-libsonly`
+	            else
+		        ICU_LIBS=`$ICU_CONFIG --ldflags`
+		    fi
 		    AC_MSG_RESULT($ICU_LIBS)
 		else
 		    ICU_CPPFLAGS=""
