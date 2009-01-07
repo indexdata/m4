@@ -28,8 +28,13 @@ AC_DEFUN([ID_BOOST],
 	    BOOST_CPPFLAGS=""
 	    BOOST_LIB=""
 	else
-	    BOOST_CPPFLAGS="-I${with_boost}/include"
 	    BOOST_LIB="-L${with_boost}/lib"
+	    BOOST_CPPFLAGS="-I${with_boost}/include"
+	    if test ! -f "${with_boost}/include/version.hpp"; then
+		for b in ${with_boost}/include/boost-*; do
+		    BOOST_CPPFLAGS="-I$b"
+		done
+	    fi
 	fi
 	if test "${with_boost}" = "no"; then
 	    AC_MSG_RESULT([disabled])
@@ -42,12 +47,12 @@ AC_DEFUN([ID_BOOST],
 version_is:BOOST_VERSION
 ]])])
 	    BOOST_GOT_VERSION=`(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD | $EGREP version_is 2>/dev/null | cut -d ":" -f2`
-	    if test $BOOST_GOT_VERSION = "BOOST_VERSION"; then
+	    if test "$BOOST_GOT_VERSION" = "BOOST_VERSION"; then
 		AC_MSG_RESULT([no])
 		AC_MSG_ERROR([Boost development libraries required])
 	    fi
 	    AC_MSG_RESULT([yes ($BOOST_GOT_VERSION)])
-	    if test $BOOST_GOT_VERSION -lt $BOOST_REQ_VERSION; then
+	    if test "$BOOST_GOT_VERSION" -lt $BOOST_REQ_VERSION; then
 		AC_MSG_ERROR([Boost version $BOOST_REQ_VERSION required])
 	    fi
 	    for c in $1; do
@@ -108,5 +113,9 @@ BOOST_AUTO_TEST_CASE( t )
 	LIBS="$oldLIBS"
 	AC_LANG_POP([C++])
     ])
- 
 
+dnl Local Variables:
+dnl mode:shell-script
+dnl sh-indentation: 2
+dnl sh-basic-offset: 4
+dnl End:
