@@ -23,7 +23,7 @@ AC_DEFUN([ID_BOOST],
 	BOOST_REQ_VERSION=`echo "$2" | awk 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 1000 + [$]2) * 100 + [$]3;}'`
 	CPPFLAGS="$CPPFLAGS -DBOOST_REQ_VERSION=${BOOST_REQ_VERSION}"
 
-	AC_ARG_WITH([boost],[[  --with-boost=DIR  use Boost in prefix DIR]])
+	AC_ARG_WITH([boost],[  --with-boost=DIR        use Boost in prefix DIR])
 	if test "$with_boost" = "yes" -o -z "$with_boost"; then
 	    BOOST_CPPFLAGS=""
 	    BOOST_LIB=""
@@ -35,6 +35,12 @@ AC_DEFUN([ID_BOOST],
 		    BOOST_CPPFLAGS="-I$b"
 		done
 	    fi
+	fi
+	AC_ARG_WITH([boost-toolset],[  --with-boost-toolset=x  use Boost toolset (eg gcc43)])
+	if test "$with_boost_toolset" = "yes" -o -z "$with_boost_toolset"; then
+	    BOOST_TOOLSET=""
+	else
+	    BOOST_TOOLSET="-${with_boost_toolset}"
 	fi
 	if test "${with_boost}" = "no"; then
 	    AC_MSG_RESULT([disabled])
@@ -62,7 +68,7 @@ version_is:BOOST_VERSION
 			AC_SUBST([BOOST_THREAD_LIB])
 			saveLIBS="${LIBS}"
 			BOOST_THREAD_LIB=""
-			for l in boost_thread-mt boost_thread; do
+			for l in boost_thread${BOOST_TOOLSET}-mt boost_thread${BOOST_TOOLSET}; do
 		            LIBS="${saveLIBS} -l${l}"
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
@@ -84,7 +90,7 @@ int x = BOOST_VERSION;
 			saveLIBS="${LIBS}"
 			AC_SUBST([BOOST_TEST_LIB])
 			BOOST_TEST_LIB=""
-			for l in boost_unit_test_framework-mt boost_unit_test_framework; do
+			for l in boost_unit_test_framework${BOOST_TOOLSET}-mt boost_unit_test_framework${BOOST_TOOLSET}; do
 			    LIBS="${saveLIBS} -l${l}"
 			    AC_LINK_IFELSE([AC_LANG_SOURCE([[
 #define BOOST_TEST_DYN_LINK
