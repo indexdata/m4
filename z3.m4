@@ -15,7 +15,7 @@ AC_DEFUN([Z3_INIT],
 		else
 			z3srcdir=$srcdir
 		fi
-		for i in ${z3srcdir}/../../z3 ${z3srcdir}/../z3-* ${z3srcdir}/../z3; do
+		for i in ${z3srcdir}/../../z3c ${z3srcdir}/../z3c-* ${z3srcdir}/../z3c; do
 			if test -d $i; then
 				if test -r $i/idzebra-config-3.0; then
 					z3config=$i/idzebra-config-3.0
