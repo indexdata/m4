@@ -15,7 +15,7 @@ AC_DEFUN([AUTHORITY_INIT],
 		else
 			authsrcdir=$srcdir
 		fi
-		for i in ${authsrcdir}/../../authc ${authsrcdir}/../authc-* ${authsrcdir}/../authc; do
+		for i in ${authsrcdir}/../../frbr ${authsrcdir}/../frbr-* ${authsrcdir}/../frbr; do
 			if test -d $i; then
 				if test -r $i/authority-config-0.0; then
 					authconfig=$i/authority-config-0.0
