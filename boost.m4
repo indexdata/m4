@@ -32,7 +32,7 @@ AC_DEFUN([ID_BOOST],
 		if test -d "$b"; then
 	    	    BOOST_LIB="-L$b"
 		fi
-            fi
+            done
 	    BOOST_CPPFLAGS="-I${with_boost}/include"
 	    if test ! -f "${with_boost}/include/boost/version.hpp"; then
 		for b in ${with_boost}/include/boost-*; do
