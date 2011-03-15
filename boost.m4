@@ -28,9 +28,13 @@ AC_DEFUN([ID_BOOST],
 	    BOOST_CPPFLAGS=""
 	    BOOST_LIB=""
 	else
-	    BOOST_LIB="-L${with_boost}/lib"
+	    for b in ${with_boost}/lib ${with_boost}/lib64; do
+		if test -d "$b"; then
+	    	    BOOST_LIB="-L$b"
+		fi
+            done
 	    BOOST_CPPFLAGS="-I${with_boost}/include"
-	    if test ! -f "${with_boost}/include/version.hpp"; then
+	    if test ! -f "${with_boost}/include/boost/version.hpp"; then
 		for b in ${with_boost}/include/boost-*; do
 		    BOOST_CPPFLAGS="-I$b"
 		done
