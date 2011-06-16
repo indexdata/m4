@@ -57,7 +57,8 @@ AC_DEFUN([ID_BOOST],
 version_is:BOOST_VERSION
 ]])])
 	    BOOST_GOT_VERSION=`(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD | $EGREP version_is 2>/dev/null | cut -d ":" -f2`
-	    if test "$BOOST_GOT_VERSION" = "BOOST_VERSION"; then
+	    if test -z "$BOOST_GOT_VERSION" -o \
+		"$BOOST_GOT_VERSION" = "BOOST_VERSION"; then
 		AC_MSG_RESULT([no])
 		AC_MSG_ERROR([Boost development libraries required])
 	    fi
