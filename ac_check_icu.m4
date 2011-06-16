@@ -64,6 +64,11 @@ AC_DEFUN([AC_CHECK_ICU],[
 	            else
 		        ICU_LIBS=`$ICU_CONFIG --ldflags`
 		    fi
+		    case $host_os in
+			solaris*)
+			    ICU_LIBS="$ICU_LIBS -lCrun"
+			    ;;
+		    esac
 		    AC_MSG_RESULT($ICU_LIBS)
 		else
 		    ICU_CPPFLAGS=""
