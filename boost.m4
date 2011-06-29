@@ -117,6 +117,28 @@ BOOST_AUTO_TEST_CASE( t )
 			fi
 			LIBS="${saveLIBS}"
 			;;
+		    regex)
+			AC_MSG_CHECKING([Boost regex])
+			AC_SUBST([BOOST_REGEX_LIB])
+			saveLIBS="${LIBS}"
+			BOOST_REGEX_LIB=""
+			for l in boost_regex${BOOST_TOOLSET}-mt boost_regex${BOOST_TOOLSET}; do
+		            LIBS="${saveLIBS} -l${l}"
+			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+#include <boost/version.hpp>
+#include <boost/regex.hpp>
+]],[[ 
+int x = BOOST_VERSION;
+]])],[
+			    BOOST_REGEX_LIB="-l${l}"
+			    break],[])
+			done
+			if test "${BOOST_REGEX_LIB}"; then
+			    AC_MSG_RESULT([yes])
+			else
+			    AC_MSG_RESULT([no])
+			fi
+			;;
 		esac
 	    done
 	fi
