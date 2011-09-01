@@ -57,7 +57,8 @@ AC_DEFUN([ID_BOOST],
 version_is:BOOST_VERSION
 ]])])
 	    BOOST_GOT_VERSION=`(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD | $EGREP version_is 2>/dev/null | cut -d ":" -f2`
-	    if test "$BOOST_GOT_VERSION" = "BOOST_VERSION"; then
+	    if test -z "$BOOST_GOT_VERSION" -o \
+		"$BOOST_GOT_VERSION" = "BOOST_VERSION"; then
 		AC_MSG_RESULT([no])
 		AC_MSG_ERROR([Boost development libraries required])
 	    fi
@@ -99,6 +100,7 @@ int x = BOOST_VERSION;
 			    AC_LINK_IFELSE([AC_LANG_SOURCE([[
 #define BOOST_TEST_DYN_LINK
 #define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MODULE configure
 #include <boost/test/auto_unit_test.hpp>
 BOOST_AUTO_TEST_CASE( t ) 
 {
@@ -115,6 +117,28 @@ BOOST_AUTO_TEST_CASE( t )
 			    AC_MSG_RESULT([no])
 			fi
 			LIBS="${saveLIBS}"
+			;;
+		    regex)
+			AC_MSG_CHECKING([Boost regex])
+			AC_SUBST([BOOST_REGEX_LIB])
+			saveLIBS="${LIBS}"
+			BOOST_REGEX_LIB=""
+			for l in boost_regex${BOOST_TOOLSET}-mt boost_regex${BOOST_TOOLSET}; do
+		            LIBS="${saveLIBS} -l${l}"
+			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+#include <boost/version.hpp>
+#include <boost/regex.hpp>
+]],[[ 
+int x = BOOST_VERSION;
+]])],[
+			    BOOST_REGEX_LIB="-l${l}"
+			    break],[])
+			done
+			if test "${BOOST_REGEX_LIB}"; then
+			    AC_MSG_RESULT([yes])
+			else
+			    AC_MSG_RESULT([no])
+			fi
 			;;
 		esac
 	    done

@@ -10,7 +10,7 @@ if test -n "$docdir"; then
         AC_SUBST([docdir])
 fi
 AC_SUBST(XSLTPROC_COMPILE)
-XSLTPROC_COMPILE='xsltproc -path ".:$(srcdir)"'
+XSLTPROC_COMPILE='xsltproc --xinclude -path ".:$(srcdir)"'
 AC_SUBST(MAN_COMPILE)
 MAN_COMPILE='$(XSLTPROC_COMPILE) $(srcdir)/common/id.man.xsl'
 AC_SUBST(HTML_COMPILE)
