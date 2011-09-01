@@ -66,7 +66,7 @@ AC_DEFUN([AC_CHECK_ICU],[
 		    fi
 		    case $host_os in
 			solaris*)
-			    ICU_LIBS="$ICU_LIBS -lCrun"
+			    AC_CHECK_LIB([Crun],[_fini],[ICU_LIBS="$ICU_LIBS -lCrun"])
 			    ;;
 		    esac
 		    AC_MSG_RESULT($ICU_LIBS)
