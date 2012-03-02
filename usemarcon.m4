@@ -32,7 +32,7 @@ AC_DEFUN([USEMARCON_INIT],
                 USEMARCONINC=`$usemarconconfig --cflags $1`
                 USEMARCONVERSION=`$usemarconconfig --version`
                 AC_MSG_RESULT($usemarconconfig)
-                AC_DEFINE(HAVE_USEMARCON)
+                AC_DEFINE([HAVE_USEMARCON],[1],[Define to 1 if USEMARCON is used])
         else
                 AC_MSG_RESULT(Not found)
                 USEMARCONVERSION=NONE
