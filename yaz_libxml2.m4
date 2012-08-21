@@ -44,6 +44,7 @@ if test "$xml2dir" != "no"; then
 	    AC_MSG_ERROR([libxml2 development libraries not found.])
 	fi
     fi
+    XML2_LIBS=`echo $XML2_LIBS|sed 's@-./usr/lib @@g'`
 fi
 ])
 
@@ -97,6 +98,7 @@ if test "$xsltdir" != "no"; then
 	    AC_MSG_ERROR([libXSLT development libraries not found.])
 	fi
     fi
+    XML2_LIBS=`echo $XML2_LIBS|sed 's@-./usr/lib @@g'`
 fi
 ])
 
