@@ -73,15 +73,19 @@ version_is:BOOST_VERSION
 			AC_SUBST([BOOST_THREAD_LIB])
 			saveLIBS="${LIBS}"
 			BOOST_THREAD_LIB=""
-			for l in boost_thread${BOOST_TOOLSET}-mt boost_thread${BOOST_TOOLSET}; do
-		            LIBS="${saveLIBS} -l${l}"
+			for l in ${BOOST_TOOLSET}-mt ${BOOST_TOOLSET}; do
+			    trylib="-lboost_thread${l}"
+			    if test "$BOOST_GOT_VERSION" -ge 104100; then
+				trylib="-lboost_system${l} ${trylib}"
+			    fi
+		            LIBS="${saveLIBS} ${trylib}"
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
 #include <boost/thread/thread.hpp>
 ]],[[ 
 int x = BOOST_VERSION;
 ]])],[
-			    BOOST_THREAD_LIB="-l${l}"
+			    BOOST_THREAD_LIB="${trylib}"
 			    break],[])
 			done
 			if test "${BOOST_THREAD_LIB}"; then
