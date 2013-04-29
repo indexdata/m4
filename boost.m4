@@ -69,7 +69,11 @@ version_is:BOOST_VERSION
 	    for c in $1; do
 	    	case $c in 
 		    thread)
-			AC_MSG_CHECKING([Boost threads])
+			if test "$BOOST_GOT_VERSION" -ge 104100; then
+			    AC_MSG_CHECKING([Boost threads + system])
+			else
+			    AC_MSG_CHECKING([Boost threads])
+			fi
 			AC_SUBST([BOOST_THREAD_LIB])
 			saveLIBS="${LIBS}"
 			BOOST_THREAD_LIB=""
