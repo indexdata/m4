@@ -77,7 +77,7 @@ version_is:BOOST_VERSION
 			AC_SUBST([BOOST_THREAD_LIB])
 			saveLIBS="${LIBS}"
 			BOOST_THREAD_LIB=""
-			for l in ${BOOST_TOOLSET}-mt ${BOOST_TOOLSET}; do
+			for l in "${BOOST_TOOLSET}-mt" "${BOOST_TOOLSET}"; do
 			    trylib="-lboost_thread${l}"
 			    if test "$BOOST_GOT_VERSION" -ge 104100; then
 				trylib="-lboost_system${l} ${trylib}"
