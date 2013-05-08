@@ -68,20 +68,38 @@ version_is:BOOST_VERSION
 	    fi
 	    for c in $1; do
 	    	case $c in 
-		    thread)
+		    system)
+			AC_SUBST([BOOST_SYSTEM_LIB])
+			BOOST_SYSTEM_LIB=""
 			if test "$BOOST_GOT_VERSION" -ge 104100; then
-			    AC_MSG_CHECKING([Boost threads + system])
-			else
-			    AC_MSG_CHECKING([Boost threads])
+			    AC_MSG_CHECKING([Boost system])
+			    saveLIBS="${LIBS}"
+			    for l in "${BOOST_TOOLSET}-mt" "${BOOST_TOOLSET}"; do
+				trylib="-lboost_system${l}"
+				LIBS="${saveLIBS} ${trylib}"
+				AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+#include <boost/version.hpp>
+#include <boost/system/error_code.hpp>
+]],[[ 
+int x = BOOST_VERSION;
+]])],[
+					BOOST_SYSTEM_LIB="${trylib}"
+					break],[])
+			    done
+			    if test "${BOOST_SYSTEM_LIB}"; then
+				AC_MSG_RESULT([yes])
+			    else
+				AC_MSG_RESULT([no])
+			    fi
 			fi
+			;;
+		    thread)
+			AC_MSG_CHECKING([Boost threads])
 			AC_SUBST([BOOST_THREAD_LIB])
 			saveLIBS="${LIBS}"
 			BOOST_THREAD_LIB=""
 			for l in "${BOOST_TOOLSET}-mt" "${BOOST_TOOLSET}"; do
 			    trylib="-lboost_thread${l}"
-			    if test "$BOOST_GOT_VERSION" -ge 104100; then
-				trylib="-lboost_system${l} ${trylib}"
-			    fi
 		            LIBS="${saveLIBS} ${trylib}"
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
