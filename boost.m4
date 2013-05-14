@@ -90,6 +90,7 @@ int x = BOOST_VERSION;
 				AC_MSG_RESULT([yes])
 			    else
 				AC_MSG_RESULT([no])
+			        LIBS="${saveLIBS}"
 			    fi
 			fi
 			;;
@@ -114,6 +115,7 @@ int x = BOOST_VERSION;
 			    AC_MSG_RESULT([yes])
 			else
 			    AC_MSG_RESULT([no])
+			    LIBS="${saveLIBS}"
 			fi
 			;;
 		    test)
@@ -164,6 +166,7 @@ int x = BOOST_VERSION;
 			    AC_MSG_RESULT([yes])
 			else
 			    AC_MSG_RESULT([no])
+			    LIBS="${saveLIBS}"
 			fi
 			;;
 		esac
