@@ -74,7 +74,7 @@ version_is:BOOST_VERSION
 			if test "$BOOST_GOT_VERSION" -ge 104100; then
 			    AC_MSG_CHECKING([Boost system])
 			    saveLIBS="${LIBS}"
-			    for l in "${BOOST_TOOLSET}-mt" "${BOOST_TOOLSET}"; do
+			    for l in "${BOOST_TOOLSET}" "${BOOST_TOOLSET}-mt"; do
 				trylib="-lboost_system${l}"
 				LIBS="${saveLIBS} ${trylib}"
 				AC_LINK_IFELSE([AC_LANG_PROGRAM([[
@@ -99,7 +99,7 @@ int x = BOOST_VERSION;
 			AC_SUBST([BOOST_THREAD_LIB])
 			saveLIBS="${LIBS}"
 			BOOST_THREAD_LIB=""
-			for l in "${BOOST_TOOLSET}-mt" "${BOOST_TOOLSET}"; do
+			for l in "${BOOST_TOOLSET}" "${BOOST_TOOLSET}-mt"; do
 			    trylib="-lboost_thread${l}"
 		            LIBS="${saveLIBS} ${trylib}"
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
@@ -123,7 +123,7 @@ int x = BOOST_VERSION;
 			saveLIBS="${LIBS}"
 			AC_SUBST([BOOST_TEST_LIB])
 			BOOST_TEST_LIB=""
-			for l in boost_unit_test_framework${BOOST_TOOLSET}-mt boost_unit_test_framework${BOOST_TOOLSET}; do
+			for l in boost_unit_test_framework${BOOST_TOOLSET} boost_unit_test_framework${BOOST_TOOLSET}-mt; do
 			    LIBS="${saveLIBS} -l${l}"
 			    AC_LINK_IFELSE([AC_LANG_SOURCE([[
 #define BOOST_TEST_DYN_LINK
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE( t )
 			AC_SUBST([BOOST_REGEX_LIB])
 			saveLIBS="${LIBS}"
 			BOOST_REGEX_LIB=""
-			for l in boost_regex${BOOST_TOOLSET}-mt boost_regex${BOOST_TOOLSET}; do
+			for l in boost_regex${BOOST_TOOLSET} boost_regex${BOOST_TOOLSET}-mt; do
 		            LIBS="${saveLIBS} -l${l}"
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
