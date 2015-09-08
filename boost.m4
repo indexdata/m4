@@ -54,9 +54,9 @@ AC_DEFUN([ID_BOOST],
 	    AC_LANG_CONFTEST(
                [AC_LANG_SOURCE([[
 #include <boost/version.hpp>
-version_is:BOOST_VERSION
+BOOST_VERSION
 ]])])
-	    BOOST_GOT_VERSION=`(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD | $EGREP version_is 2>/dev/null | cut -d ":" -f2`
+	    BOOST_GOT_VERSION=`(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD | grep -v '#' | grep -v '^$' 2>/dev/null`
 	    if test -z "$BOOST_GOT_VERSION" -o \
 		"$BOOST_GOT_VERSION" = "BOOST_VERSION"; then
 		AC_MSG_RESULT([no])
