@@ -56,7 +56,7 @@ sh_flags=""
 conf_flags=""
 case $1 in
     -d)
-	sh_cflags="-g -Wall -Wdeclaration-after-statement -Wstrict-prototypes"
+	sh_cflags="-g -Wall -Wstrict-prototypes"
 	sh_cxxflags="-g -Wall"
 	enable_configure=true
 	enable_help=false
