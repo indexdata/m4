@@ -26,7 +26,7 @@
 !define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\4BD6D1222E64C3330BB9F59453D19008"
 !endif
 
-InstallDir "$PROGRAMFILES64\YAZ"
+InstallDir "$PROGRAMFILES64\$(^Name)"
 !else
 ; 32-bit
 !if "${VSVER}" == "14.0"
@@ -38,6 +38,6 @@ InstallDir "$PROGRAMFILES64\YAZ"
 !define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\C6F172F8B7E6A0D359B1E6B796D487DB"
 !endif
 
-InstallDir "$PROGRAMFILES\YAZ"
+InstallDir "$PROGRAMFILES\$(^Name)"
 !endif
 
