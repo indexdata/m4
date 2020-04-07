@@ -95,10 +95,9 @@ AC_ARG_WITH(docbook-xsl,[[  --with-docbook-xsl=DIR  use Docbook XSL in DIR/{html
 
 AC_DEFUN([YAZ_INIT],
 [
-	AC_SUBST(YAZLIB)
-	AC_SUBST(YAZLALIB)
-	AC_SUBST(YAZINC)
-	AC_SUBST(YAZVERSION)
+	AC_SUBST(YAZ_LIBS)
+	AC_SUBST(YAZ_CFLAGS)
+	AC_SUBST(YAZ_VERSION)
 	yazconfig=NONE
 	yazpath=NONE
 	AC_ARG_WITH(yaz, [  --with-yaz=DIR          use yaz-config in DIR (example /home/yaz-1.7)], [yazpath=$withval])
@@ -123,29 +122,28 @@ AC_DEFUN([YAZ_INIT],
 	fi
 	AC_MSG_CHECKING(for YAZ)
 	if $yazconfig --version >/dev/null 2>&1; then
-		YAZLIB=`$yazconfig --libs $1`
+		YAZ_LIBS=`$yazconfig --libs $1`
 		# if this is empty, it's a simple version YAZ 1.6 script
 		# so we have to source it instead...
-		if test "X$YAZLIB" = "X"; then
+		if test "X$YAZ_LIBS" = "X"; then
 			. $yazconfig
 		else
-			YAZLALIB=`$yazconfig --lalibs $1`
-			YAZINC=`$yazconfig --cflags $1`
-			YAZVERSION=`$yazconfig --version`
+			YAZ_CFLAGS=`$yazconfig --cflags $1`
+			YAZ_VERSION=`$yazconfig --version`
 		fi
 		AC_MSG_RESULT([$yazconfig])
 	else
 		AC_MSG_RESULT(Not found)
-		YAZVERSION=NONE
+		YAZ_VERSION=NONE
 	fi
-	if test "X$YAZVERSION" != "XNONE"; then
+	if test "X$YAZ_VERSION" != "XNONE"; then
 		AC_MSG_CHECKING([for YAZ version])
-		AC_MSG_RESULT([$YAZVERSION])
+		AC_MSG_RESULT([$YAZ_VERSION])
 		if test "$2"; then
-			have_yaz_version=`echo "$YAZVERSION" | awk 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 1000 + [$]2) * 1000 + [$]3;}'`
+			have_yaz_version=`echo "$YAZ_VERSION" | awk 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 1000 + [$]2) * 1000 + [$]3;}'`
 			req_yaz_version=`echo "$2" | awk 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 1000 + [$]2) * 1000 + [$]3;}'`
 			if test "$have_yaz_version" -lt "$req_yaz_version"; then
-				AC_MSG_ERROR([$YAZVERSION. Requires YAZ $2 or later])
+				AC_MSG_ERROR([$YAZ_VERSION. Requires YAZ $2 or later])
 			fi
 		fi
 	fi
