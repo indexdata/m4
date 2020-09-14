@@ -146,7 +146,7 @@ AC_DEFUN([YAZ_CONFIG],
 
 ])
 
-dnl helper get YAZ flasg/libs via yaz-config
+dnl helper get YAZ flags/libs via yaz-config
 dnl argument 1 is components (server,icu,static)
 dnl argument 2 is version required (or later)
 AC_DEFUN([YAZ_INIT],
@@ -159,13 +159,16 @@ AC_DEFUN([YAZ_INIT],
 	yazpath=NONE
 	AC_ARG_WITH(yaz, [  --with-yaz=DIR          use yaz-config in DIR; DIR=pkg to use pkg-config], [yazpath=$withval])
 	if test "x$yazpath" = "xpkg"; then
-		AC_MSG_CHECKING([YAZ components])
-		COMP="yaz `echo $1|sed 's/static//g'`"
-		AC_MSG_RESULT([$COMP])
+		COMP=yaz
+		for i in $1; do
+			if test "$i" != "static"; then
+				COMP="$COMP yaz-$i"
+			fi
+		done
 		PKG_CHECK_MODULES([YAZ], [$COMP], [
 			YAZLIB=`$PKG_CONFIG --libs $COMP`
 			YAZLALIB=$YAZLIB
-			YAZINC=`$PKG_CONFIG --cflags yaz $COMP`
+			YAZINC=`$PKG_CONFIG --cflags $COMP`
 			AC_MSG_CHECKING([for YAZ version])
 			YAZVERSION=`$PKG_CONFIG --modversion yaz`
 			AC_MSG_RESULT([$YAZVERSION])
