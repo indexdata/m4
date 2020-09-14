@@ -93,15 +93,9 @@ AC_ARG_WITH(docbook-xsl,[[  --with-docbook-xsl=DIR  use Docbook XSL in DIR/{html
 ])
 ]) 
 
-AC_DEFUN([YAZ_INIT],
+dnl helper get YAZ flasg/libs via yaz-config
+AC_DEFUN([YAZ_CONFIG],
 [
-	AC_SUBST(YAZLIB)
-	AC_SUBST(YAZLALIB)
-	AC_SUBST(YAZINC)
-	AC_SUBST(YAZVERSION)
-	yazconfig=NONE
-	yazpath=NONE
-	AC_ARG_WITH(yaz, [  --with-yaz=DIR          use yaz-config in DIR (example /home/yaz-1.7)], [yazpath=$withval])
 	if test "x$yazpath" != "xNONE"; then
 		yazconfig=$yazpath/yaz-config
 	else
@@ -121,7 +115,7 @@ AC_DEFUN([YAZ_INIT],
 			AC_PATH_PROG(yazconfig, yaz-config, NONE)
 		fi
 	fi
-	AC_MSG_CHECKING(for YAZ)
+	AC_MSG_CHECKING(for YAZ via yaz-config)
 	if $yazconfig --version >/dev/null 2>&1; then
 		YAZLIB=`$yazconfig --libs $1`
 		# if this is empty, it's a simple version YAZ 1.6 script
@@ -148,6 +142,41 @@ AC_DEFUN([YAZ_INIT],
 				AC_MSG_ERROR([$YAZVERSION. Requires YAZ $2 or later])
 			fi
 		fi
+	fi
+
+])
+
+dnl helper get YAZ flasg/libs via yaz-config
+dnl argument 1 is components (server,icu,static)
+dnl argument 2 is version required (or later)
+AC_DEFUN([YAZ_INIT],
+[
+	AC_SUBST(YAZLIB)
+	AC_SUBST(YAZLALIB)
+	AC_SUBST(YAZINC)
+	AC_SUBST(YAZVERSION)
+	yazconfig=NONE
+	yazpath=NONE
+	AC_ARG_WITH(yaz, [  --with-yaz=DIR          use yaz-config in DIR; DIR=pkg to use pkg-config], [yazpath=$withval])
+	if test "x$yazpath" = "xpkg"; then
+		AC_MSG_CHECKING([YAZ components])
+		COMP="yaz `echo $1|sed 's/static//g'`"
+		AC_MSG_RESULT([$COMP])
+		PKG_CHECK_MODULES([YAZ], [$COMP], [
+			YAZLIB=`$PKG_CONFIG --libs $COMP`
+			YAZLALIB=$YAZLIB
+			YAZINC=`$PKG_CONFIG --cflags yaz $COMP`
+			AC_MSG_CHECKING([for YAZ version])
+			YAZVERSION=`$PKG_CONFIG --modversion yaz`
+			AC_MSG_RESULT([$YAZVERSION])
+			if test "$2"; then
+				if ! $PKG_CONFIG --atleast-version=$2 yaz; then
+					AC_MSG_ERROR([$YAZVERSION. Requires YAZ $2 or later])
+				fi
+			fi
+		])
+	else
+		YAZ_CONFIG($1,$2)
 	fi
 ]) 
 
