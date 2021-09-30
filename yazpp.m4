@@ -10,15 +10,14 @@ AC_DEFUN([YAZPP_INIT],
 	AC_ARG_WITH(yazpp, [  --with-yazpp=DIR        use yazpp-config in DIR; DIR=pkg to use pkg-config], [yazpppath=$withval])
 	if test "x$yazpppath" = "xpkg"; then
 		PKG_CHECK_MODULES([YAZPP], [yazpp], [
-			COMP=yazpp
-			YAZPPLIB=`$PKG_CONFIG --libs $COMP`
+			YAZPPLIB=$YAZPP_LIBS
 			YAZPPLALIB=$YAZPPLIB
-			YAZPPINC=`$PKG_CONFIG --cflags $COMP`
+			YAZPPINC=$YAZPP_CFLAGS
 			AC_MSG_CHECKING([for YAZ++ version])
-			YAZPPVERSION=`$PKG_CONFIG --modversion $COMP`
+			YAZPPVERSION=`$PKG_CONFIG --modversion yazpp`
 			AC_MSG_RESULT([$YAZPPVERSION])
 			if test "$2"; then
-				if ! $PKG_CONFIG --atleast-version=$2 $COMP; then
+				if ! $PKG_CONFIG --atleast-version=$2 yazpp; then
 					AC_MSG_ERROR([$YAZPPVERSION. Requires YAZ++ $2 or later])
 				fi
 			fi
