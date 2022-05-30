@@ -1,13 +1,13 @@
 dnl helper get YAZ++ flags/libs via yazpp.pc or yazpp-config
 AC_DEFUN([YAZPP_INIT],
 [
-	AC_SUBST(YAZPPLIB)
-	AC_SUBST(YAZPPLALIB)
-	AC_SUBST(YAZPPINC)
-	AC_SUBST(YAZPPVERSION)
+	AC_SUBST([YAZPPLIB])
+	AC_SUBST([YAZPPLALIB])
+	AC_SUBST([YAZPPINC])
+	AC_SUBST([YAZPPVERSION])
 	yazppconfig=NONE
 	yazpppath=NONE
-	AC_ARG_WITH(yazpp, [  --with-yazpp=DIR        use yazpp-config in DIR; DIR=pkg to use pkg-config], [yazpppath=$withval])
+	AC_ARG_WITH([yazpp], [  --with-yazpp=DIR        use yazpp-config in DIR; DIR=pkg to use pkg-config], [yazpppath=$withval])
 	if test "x$yazpppath" = "xpkg"; then
 		PKG_CHECK_MODULES([YAZPP], [yazpp], [
 			YAZPPLIB=$YAZPP_LIBS
@@ -46,18 +46,18 @@ AC_DEFUN([YAZPP_CONFIG],
 			fi
 		done
 		if test "x$yazppconfig" = "xNONE"; then
-			AC_PATH_PROG(yazppconfig, yazpp-config, NONE)
+			AC_PATH_PROG([yazppconfig], [yazpp-config], [NONE])
 		fi
 	fi
-	AC_MSG_CHECKING(for YAZ++ using yazpp-config)
+	AC_MSG_CHECKING([for YAZ++ using yazpp-config])
 	if $yazppconfig --version >/dev/null 2>&1; then
 		YAZPPLIB=`$yazppconfig --libs $1`
 		YAZPPLALIB=`$yazppconfig --lalibs $1`
 		YAZPPINC=`$yazppconfig --cflags $1`
 		YAZPPVERSION=`$yazppconfig --version`
-		AC_MSG_RESULT($yazppconfig)
+		AC_MSG_RESULT([$yazppconfig])
 	else
-		AC_MSG_RESULT(Not found)
+		AC_MSG_RESULT([Not found])
 		YAZVERSION=NONE
 	fi
 	if test "X$YAZPPVERSION" != "XNONE"; then
