@@ -30,7 +30,7 @@ AC_DEFUN([ID_BOOST],
 	else
 	    for b in ${with_boost}/lib ${with_boost}/lib64; do
 		if test -d "$b"; then
-	    	    BOOST_LIB="-L$b"
+	    	    BOOST_LIB+=" -L$b"
 		fi
             done
 	    BOOST_CPPFLAGS="-I${with_boost}/include"
