@@ -18,7 +18,12 @@ HTML_COMPILE='$(XSLTPROC_COMPILE) $(srcdir)/common/id.htmlhelp.xsl'
 AC_SUBST([TKL_COMPILE])
 TKL_COMPILE='$(XSLTPROC_COMPILE) $(srcdir)/common/id.tkl.xsl'
 AC_SUBST([PDF_COMPILE])
-PDF_COMPILE='pandoc -V documentclass:book -V papersize:a4 -V fontsize=12pt -V classoption:openright -V classoption:twoside'
+PDF_COMPILE='pandoc --toc \
+        -V documentclass:article \
+        -V pagestyle:headings \
+        -V papersize:a4 \
+        -V fontsize=12pt \
+        -V geometry:margin=2cm'
 
 AC_SUBST([DTD_DIR])
 AC_ARG_WITH([docbook-dtd],[[  --with-docbook-dtd=DIR  use docbookx.dtd in DIR]],
