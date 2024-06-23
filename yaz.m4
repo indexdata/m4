@@ -25,7 +25,11 @@ PDF_COMPILE='pandoc --toc \
         -V fontsize=12pt \
         -V lof \
         -V lot \
-        -V geometry:margin=2cm'
+        -V geometry:margin=2cm \
+        --listings \
+        -H $(srcdir)/common/header.tex \
+        -B $(srcdir)/common/body.tex \
+        -f docbook' \
 
 AC_SUBST([DTD_DIR])
 AC_ARG_WITH([docbook-dtd],[[  --with-docbook-dtd=DIR  use docbookx.dtd in DIR]],
