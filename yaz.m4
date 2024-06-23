@@ -23,6 +23,8 @@ PDF_COMPILE='pandoc --toc \
         -V pagestyle:headings \
         -V papersize:a4 \
         -V fontsize=12pt \
+        -V lof \
+        -V lot \
         -V geometry:margin=2cm'
 
 AC_SUBST([DTD_DIR])
