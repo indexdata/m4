@@ -26,7 +26,7 @@ AC_DEFUN([AC_CHECK_ICU],
 			  ICU_VERSION=`$pkgconfigpath --modversion icu-i18n`
 			  ICU_CPPFLAGS=""
 			  ICU_CFLAGS=`$pkgconfigpath --cflags icu-i18n`
-			  ICU_LIBS=`$pkgconfigpath --libs icu-i18n`
+			  ICU_LIBS=`$pkgconfigpath --libs icu-i18n icu-uc`
 		      else
 			  AC_MSG_RESULT([not found])
 		      fi
