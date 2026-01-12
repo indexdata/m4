@@ -23,10 +23,55 @@ AC_DEFUN([ID_BOOST],
 	BOOST_REQ_VERSION=`echo "$2" | awk 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 1000 + [$]2) * 100 + [$]3;}'`
 	CPPFLAGS="$CPPFLAGS -DBOOST_REQ_VERSION=${BOOST_REQ_VERSION}"
 
-	AC_ARG_WITH([boost],[  --with-boost=DIR        use Boost in prefix DIR])
+	AC_ARG_WITH([boost],[  --with-boost=DIR        use Boost in prefix DIR],
+		[with_boost="$withval"], [with_boost=yes])
 	if test "$with_boost" = "yes" -o -z "$with_boost"; then
-	    BOOST_CPPFLAGS=""
-	    BOOST_LIB=""
+		BOOST_CPPFLAGS=""
+		BOOST_LIB=""
+		dnl Honor common env overrides first
+		if test -n "$BOOST_INCLUDEDIR"; then
+			BOOST_CPPFLAGS="-I$BOOST_INCLUDEDIR"
+		fi
+		if test -n "$BOOST_LIBRARYDIR"; then
+			BOOST_LIB="-L$BOOST_LIBRARYDIR"
+		fi
+		if test -z "$BOOST_CPPFLAGS" -a -n "$BOOST_ROOT"; then
+			if test -f "$BOOST_ROOT/include/boost/version.hpp"; then
+				BOOST_CPPFLAGS="-I$BOOST_ROOT/include"
+			fi
+			if test -d "$BOOST_ROOT/lib"; then
+				BOOST_LIB="-L$BOOST_ROOT/lib"
+			fi
+		fi
+		dnl On macOS, prefer Homebrew if present
+		case `uname -s` in
+		Darwin)
+			if test -z "$BOOST_CPPFLAGS"; then
+				if (command -v brew >/dev/null 2>&1); then
+					hb_prefix=`brew --prefix boost 2>/dev/null`
+					if test -n "$hb_prefix" -a -f "$hb_prefix/include/boost/version.hpp"; then
+						BOOST_CPPFLAGS="-I$hb_prefix/include"
+						if test -d "$hb_prefix/lib"; then
+							BOOST_LIB="-L$hb_prefix/lib"
+						fi
+						AC_MSG_NOTICE([Auto-detected Boost via Homebrew at $hb_prefix])
+					fi
+				fi
+			fi
+			if test -z "$BOOST_CPPFLAGS"; then
+				for pfx in /opt/homebrew/opt/boost /usr/local/opt/boost /opt/local; do
+					if test -f "$pfx/include/boost/version.hpp"; then
+						BOOST_CPPFLAGS="-I$pfx/include"
+						if test -d "$pfx/lib"; then
+							BOOST_LIB="-L$pfx/lib"
+						fi
+						AC_MSG_NOTICE([Auto-detected Boost at $pfx])
+						break
+					fi
+				done
+			fi
+			;;
+		esac
 	else
 	    for b in ${with_boost}/lib ${with_boost}/lib64; do
 		if test -d "$b"; then
