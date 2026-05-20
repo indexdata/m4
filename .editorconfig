@@ -1,0 +1,23 @@
+# http://editorconfig.org/
+# For C/C++ projects @ Index Data
+
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+tab_width = 8
+
+[*.m4]
+indent_size = 8
+
+[Makefile,Makefile.*,rules]
+indent_style = tab
+indent_size = 8
+
+# Should be changed to 1 for doc (docbook files)
+[*.xml]
+indent_size = 2
