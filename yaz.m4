@@ -30,19 +30,16 @@ AC_ARG_WITH([docbook-dtd],[[  --with-docbook-dtd=DIR  use docbookx.dtd in DIR]],
 	AC_MSG_CHECKING([for docbookx.dtd])
 	DTD_DIR=""
 	for d in /usr/lib/sgml/dtd/docbook-xml \
-		 /usr/share/sgml/docbook/dtd/4.2 \
-		 /usr/share/sgml/docbook/dtd/xml/4.* \
-		 /usr/share/sgml/docbook/xml-dtd-4.* \
-		/usr/local/share/xml/docbook/4.*
+		/usr/share/xml/docbook/xml-dtd-4.4
 	do
 		if test -f $d/docbookx.dtd; then
+			AC_MSG_RESULT([$d])
 			DTD_DIR=$d
+			break
 		fi
 	done
 	if test -z "$DTD_DIR"; then
 		AC_MSG_RESULT([Not found])
-	else
-		AC_MSG_RESULT([$d])
 	fi
 ])
 AC_SUBST([DSSSL_DIR])
@@ -55,6 +52,7 @@ AC_ARG_WITH([docbook-dsssl],[[  --with-docbook-dsssl=DIR use Docbook DSSSL in DI
 	AC_MSG_CHECKING([for docbook.dsl])
 	DSSSL_DIR=""
 	for d in /usr/share/sgml/docbook/stylesheet/dsssl/modular \
+		/usr/share/sgml/docbook/dsssl-stylesheets \
 		/usr/share/sgml/docbook/dsssl-stylesheets-1.* \
 		/usr/lib/sgml/stylesheet/dsssl/docbook/nwalsh \
 		/usr/local/share/sgml/docbook/dsssl/modular
@@ -78,8 +76,10 @@ AC_ARG_WITH([docbook-xsl],[[  --with-docbook-xsl=DIR  use Docbook XSL in DIR/{ht
 ],[
 	AC_MSG_CHECKING([for htmlhelp.xsl])
 	for d in /usr/share/sgml/docbook/stylesheet/xsl/nwalsh \
-		/usr/local/share/xsl/docbook \
-		/usr/share/sgml/docbook/xsl-stylesheets-1.* 
+                /usr/share/xml/docbook/stylesheet/docbook-xsl \
+                /usr/share/xml/docbook/xsl-stylesheets \
+		/usr/local/share/xsl/docbook/xsl-stylesheets \
+		/usr/share/sgml/docbook/xsl-stylesheets-1.*
 	do
 		if test -f $d/htmlhelp/htmlhelp.xsl; then
 			AC_MSG_RESULT([$d])
@@ -91,7 +91,7 @@ AC_ARG_WITH([docbook-xsl],[[  --with-docbook-xsl=DIR  use Docbook XSL in DIR/{ht
 		AC_MSG_RESULT([Not found])
 	fi
 ])
-]) 
+])
 
 dnl helper get YAZ flasg/libs via yaz-config
 AC_DEFUN([YAZ_CONFIG],
@@ -181,5 +181,5 @@ AC_DEFUN([YAZ_INIT],
 	else
 		YAZ_CONFIG($1,$2)
 	fi
-]) 
+])
 

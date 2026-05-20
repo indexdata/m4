@@ -11,10 +11,7 @@ indent_style = space
 indent_size = 4
 tab_width = 8
 
-[*.m4]
-indent_size = 8
-
-[Makefile,Makefile.*,rules]
+[Makefile,Makefile.*,rules,*.m4]
 indent_style = tab
 indent_size = 8
 

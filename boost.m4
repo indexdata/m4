@@ -15,7 +15,7 @@ AC_DEFUN([ID_BOOST],
     [
 	AC_SUBST([BOOST_CPPFLAGS])
 	AC_SUBST([BOOST_LIB])
-	
+
 	AC_MSG_CHECKING([for Boost])
 	AC_LANG_PUSH([C++])
 	oldCPPFLAGS="$CPPFLAGS"
@@ -75,7 +75,7 @@ AC_DEFUN([ID_BOOST],
 	else
 	    for b in ${with_boost}/lib ${with_boost}/lib64; do
 		if test -d "$b"; then
-	    	    BOOST_LIB+=" -L$b"
+			BOOST_LIB+=" -L$b"
 		fi
             done
 	    BOOST_CPPFLAGS="-I${with_boost}/include"
@@ -109,10 +109,10 @@ BOOST_VERSION
 	    fi
 	    AC_MSG_RESULT([yes ($BOOST_GOT_VERSION)])
 	    if test "$BOOST_GOT_VERSION" -lt $BOOST_REQ_VERSION; then
-		AC_MSG_ERROR([Boost version $BOOST_REQ_VERSION required])
+			AC_MSG_ERROR([Boost version $BOOST_REQ_VERSION required])
 	    fi
 	    for c in $1; do
-	    	case $c in 
+		case $c in
 		    system)
 			AC_SUBST([BOOST_SYSTEM_LIB])
 			BOOST_SYSTEM_LIB=""
@@ -125,7 +125,7 @@ BOOST_VERSION
 				AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
 #include <boost/system/error_code.hpp>
-]],[[ 
+]],[[
 int x = BOOST_VERSION;
 ]])],[
 					BOOST_SYSTEM_LIB="${trylib}"
@@ -150,7 +150,7 @@ int x = BOOST_VERSION;
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
 #include <boost/thread/thread.hpp>
-]],[[ 
+]],[[
 int x = BOOST_VERSION;
 ]])],[
 			    BOOST_THREAD_LIB="${trylib}"
@@ -175,7 +175,7 @@ int x = BOOST_VERSION;
 #define BOOST_AUTO_TEST_MAIN
 #define BOOST_TEST_MODULE configure
 #include <boost/test/auto_unit_test.hpp>
-BOOST_AUTO_TEST_CASE( t ) 
+BOOST_AUTO_TEST_CASE( t )
 {
     BOOST_CHECK(1);
 }
@@ -201,7 +201,7 @@ BOOST_AUTO_TEST_CASE( t )
 			AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <boost/version.hpp>
 #include <boost/regex.hpp>
-]],[[ 
+]],[[
 int x = BOOST_VERSION;
 ]])],[
 			    BOOST_REGEX_LIB="-l${l}"
