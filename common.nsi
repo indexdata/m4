@@ -2,58 +2,74 @@
 ; Copyright (C) Index Data
 ; See the file LICENSE for details.
 
+!include "LogicLib.nsh"
+!include "WordFunc.nsh"
+
 !define VSVER "$%VisualStudioVersion%"
 
 !define VS_REDIST_EXE "vc_redist.${VSARCH}.exe"
 
-; VS 2017 defines VCToolsRedistDir env (and hopefully later versions too)
+; VS 2017 and later define VCToolsRedistDir.
 !if "${VSVER}" == "14.0"
 !define VS_REDIST_FULL "$%VSINSTALLDIR%\VC\redist\1033\${VS_REDIST_EXE}"
 !else
 !define VS_REDIST_FULL "$%VCToolsRedistDir%${VS_REDIST_EXE}"
 !endif
 
-; For example can be found with regedit:
-;  Microsoft Visual C++ 2013 x86 Minimum Runtime
+; Use the bundled package's version rather than a release-specific MSI product ID.
+!getdllversion "${VS_REDIST_FULL}" VS_REDIST_VERSION_
+!define VS_REDIST_VERSION "${VS_REDIST_VERSION_1}.${VS_REDIST_VERSION_2}.${VS_REDIST_VERSION_3}.${VS_REDIST_VERSION_4}"
+
+; VS 2015 and later share the v14 runtime registry key.
+!if ${VS_REDIST_VERSION_1} != 14
+!error "Unsupported Visual C++ runtime major version: ${VS_REDIST_VERSION_1}"
+!endif
+!define VS_REDIST_KEY "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\${VSARCH}"
+
 !if "${VSARCH}" == "x64"
 ; 64-bit
 InstallDir "$PROGRAMFILES64\$(^Name)"
-
-!if "${VSVER}" == "14.0"
-; Microsoft Visual C++ 2015 x64 Minimum Runtime - 14.0.23026
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\51E9E3D0A7EDB003691F4BFA219B4688"
-!else if "${VSVER}" == "15.0"
-; Microsoft Visual C++ 2017 x64 Minimum Runtime - 14.13.26020
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\4BD6D1222E64C3330BB9F59453D19008"
-!else if "${VSVER}" == "16.0"
-; Microsoft Visual C++ 2019 x64 Minimum Runtime - 14.28.29334
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\B5D7F3A8D2249D94487FD81C7B879276"
-!else if "${VSVER}" == "17.0"
-; Microsoft Visual C++ 2022 x64 Minimum Runtime - 14.42.34438
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\915F51E2ADF443844BEEE7CF7E8D4DEE"
-!else
-!error ${VSVER}
-!endif
-
-!else
+!else if "${VSARCH}" == "x86"
 ; 32-bit
 InstallDir "$PROGRAMFILES\$(^Name)"
-
-!if "${VSVER}" == "14.0"
-; Microsoft Visual C++ 2015 x86 Minimum Runtime - 14.0.23026
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\55E3652ACEB38283D8765E8E9B8E6B57"
-!else if "${VSVER}" == "15.0"
-; Microsoft Visual C++ 2017 x86 Minimum Runtime - 14.13.26020
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\C6F172F8B7E6A0D359B1E6B796D487DB"
-!else if "${VSVER}" == "16.0"
-; Microsoft Visual C++ 2019 x86 Minimum Runtime - 14.28.29334
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\218A10D01A28F1845864E8829E678FFD"
-!else if "${VSVER}" == "17.0"
-; Microsoft Visual C++ 2022 x86 Minimum Runtime - 14.42.34438
-!define VS_REDIST_KEY "SOFTWARE\Classes\Installer\Products\1154C0D51AC38FF44AAB0C1E59A7EBAE"
 !else
-!error ${VSVER}
+!error "Unsupported Visual C++ runtime architecture: ${VSARCH}"
 !endif
 
+; Call inside an install section after SetOutPath selects a writable directory:
+;   !insertmacro InstallVSRedist
+; Preserves $0-$3, the registry view, and the output directory.
+!macro InstallVSRedist
+!if "${VS_REDIST_FULL}" != ""
+	Push $0
+	Push $1
+	Push $2
+	Push $3
+	; The runtime registration is available in the 32-bit registry view,
+	; with separate subkeys for x86 and x64 packages.
+	SetRegView 32
+	ReadRegDWORD $0 HKLM "${VS_REDIST_KEY}" "Installed"
+	ReadRegStr $1 HKLM "${VS_REDIST_KEY}" "Version"
+	SetRegView lastused
+	StrCpy $2 2 ; Install if the runtime is absent or its version is unknown.
+	${If} $0 == 1
+	${AndIf} $1 != ""
+	  ; Registry versions can have a leading "v" (e.g. v14.44.35211.00).
+	  StrCpy $3 $1 1
+	  ${If} $3 == "v"
+	    StrCpy $1 $1 "" 1
+	  ${EndIf}
+	  ${VersionCompare} "$1" "${VS_REDIST_VERSION}" $2
+	${EndIf}
+	${If} $2 == 2 ; Installed version is older than the bundled package.
+	  File "${VS_REDIST_FULL}"
+	  ExecWait '"$OUTDIR\${VS_REDIST_EXE}" /install /passive /norestart'
+	  Delete "$OUTDIR\${VS_REDIST_EXE}"
+	${EndIf}
+	Pop $3
+	Pop $2
+	Pop $1
+	Pop $0
 !endif
+!macroend
 
