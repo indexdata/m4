@@ -143,10 +143,6 @@ if test "$exsltdir" != "no"; then
 	fi
     fi
 fi
-OLIBS=$LIBS
-LIBS="$LIBS $XML2_LIBS"
-AC_CHECK_FUNCS([xsltSaveResultToString])
-LIBS=$OLIBS
 ])
 dnl Local Variables:
 dnl mode:shell-script
